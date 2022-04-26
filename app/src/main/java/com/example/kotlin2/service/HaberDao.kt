@@ -17,7 +17,7 @@ interface HaberDao {
     suspend fun getHaber(id: Int): Haber
 
     @Insert
-    suspend fun insertAll(vararg habers: HaberResult): List<Long>
+    suspend fun insertAll(habers: List<Haber>): List<Long>
 
     @Query("DELETE FROM haber")
     suspend fun deleteHabers()

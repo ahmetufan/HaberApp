@@ -18,13 +18,16 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     private val haberAPIService = HaberAPIService()
     private val compositeDisposable = CompositeDisposable()
 
-    val habers = MutableLiveData<HaberResult>()
+    val habers = MutableLiveData<List<Haber>>()
     val haberError = MutableLiveData<Boolean>()
     val haberLoading = MutableLiveData<Boolean>()
 
     fun refreshing() {
 
         getDataFromAPI()
+    }
+    init {
+        getDataFromSQLite()
     }
 
     private fun getDataFromAPI() {
@@ -37,7 +40,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<HaberResult>() {
                     override fun onSuccess(t: HaberResult) {
-                        storeInSQLite(t)
+                        storeInSQLite(t.result)
                     }
 
                     override fun onError(e: Throwable) {
@@ -56,21 +59,22 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    private fun showHabers(haberResult: HaberResult) {
+    private fun showHabers(haberResult: List<Haber>) {
         habers.value = haberResult
         haberError.value = false
         haberLoading.value = false
     }
 
-    private fun storeInSQLite(haberResultSQLite: HaberResult) {
+    private fun storeInSQLite(haberResultSQLite: List<Haber>) {
         launch {
             val dao=HaberDatabase(getApplication()).haberDao()
             dao.deleteHabers()
-            val long=dao.insertAll(haberResultSQLite)
-            var i=0
-            while (i<haberResultSQLite) {
+            dao.insertAll(haberResultSQLite)
+            /*var i=0
+            while (i < long.size) {
                 haberResultSQLite[i]
-            }
+                i++
+            }*/
         }
     }
 

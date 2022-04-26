@@ -35,7 +35,7 @@ class ListFragment : Fragment() {
 
         viewModel=ViewModelProvider(this).get(ListViewModel::class.java)
 
-        viewModel.refreshing()
+        //viewModel.refreshing()
 
         //Recyclerview
         recyclerview.layoutManager=GridLayoutManager(context,2)
@@ -60,7 +60,7 @@ class ListFragment : Fragment() {
         viewModel.habers.observe(viewLifecycleOwner, Observer { habers ->
             habers?.let {
                 recyclerview.visibility=View.VISIBLE
-                adaptery.updateHaberList(habers.result)
+                adaptery.updateHaberList(habers)
             }
         })
 
