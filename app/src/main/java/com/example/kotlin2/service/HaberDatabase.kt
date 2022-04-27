@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.kotlin2.Haber
 import com.example.kotlin2.HaberResult
 
-@Database(entities = arrayOf(HaberResult::class), version = 1)
+@Database(entities = [Haber::class], version = 1)
 abstract class HaberDatabase : RoomDatabase() {
 
     abstract fun haberDao(): HaberDao
